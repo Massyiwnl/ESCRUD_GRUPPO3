@@ -1,0 +1,91 @@
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UtenteDatabase {
+
+public void insert(Utente utente) {
+    try {
+        Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+
+        String insert = "INSERT INTO `utenti` VALUES(?,?)";
+
+        PreparedStatement preparedStatement = conn.prepareStatement(insert);
+
+        preparedStatement.setString(1, utente.getNome());
+        preparedStatement.setString(2, utente.getEmail());
+        preparedStatement.executeUpdate();
+
+
+    }catch(SQLException e ) {
+        e.printStackTrace();
+    }
+  }
+
+  public List<Utente> read() {
+
+        List<Utente> listaUtenti = new ArrayList<>();
+
+    try {
+        Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+        String read = "SELECT * FROM `utenti`";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(read);
+        
+        while(rs.next()) {
+            String nome = rs.getString("nome");
+            String email = rs.getString("email");
+            Utente utente = new Utente(0,nome,email);
+            listaUtenti.add(utente);
+        }
+        return listaUtenti;
+    }catch(SQLException e) {
+        e.printStackTrace();
+        
+    }
+    return null;
+  }
+
+}
+
+class Utente {
+    
+    private int id;
+    private String nome;
+    private String email;
+
+    public Utente(int id, String nome, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    @Override
+    public String toString() {
+        return "Utenti [id=" + id + ", nome=" + nome + ", email=" + email + "]";
+    }
+
+    
+}
