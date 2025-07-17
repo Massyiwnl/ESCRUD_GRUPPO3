@@ -1,3 +1,5 @@
+package com.example;
+
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class UtenteDatabase {
 
@@ -33,7 +36,7 @@ public void insert(Utente utente) {
 
     try {
         Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
-        String read = "SELECT * FROM `utenti`";
+        String read = "SELECT * FROM `utenti` WHERE id= ?";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(read);
         
@@ -51,7 +54,46 @@ public void insert(Utente utente) {
     return null;
   }
 
+  // Metodo per aggiornare il nome di un utente dato l'id
+    public void update(Utente utente) {
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+
+            String update = "UPDATE `utenti` SET `nome` = ?, `email` =? WHERE `id` = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(update);
+
+            preparedStatement.setString(1, utente.getNome());
+            preparedStatement.setString(2,utente.getEmail());
+            preparedStatement.setInt(3, utente.getId());
+            preparedStatement.executeUpdate();
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Metodo per cancellare un utente tramite id
+    public void delete(int id) {
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+            // Query SQL per cancellare un utente tramite id
+            String sql = "DELETE FROM utenti WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id); // Imposta il parametro (id dell'utente da cancellare)
+            ps.executeUpdate();
+
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
+
 
 class Utente {
     
