@@ -1,6 +1,5 @@
 package com.example;
 
-
 import java.util.Scanner;
 
 public class Application    {
@@ -32,30 +31,47 @@ public class Application    {
                             utenteDatabase.read();
 
                         break;
-                    case 3:
-                        System.out.println("Inserisci il nuovo nome dell utente: ");
+                     case 3:
+                        System.out.println("Inserisci il nuovo nome dell'utente: ");
                         String nome2 = scanner.nextLine();
-                        System.out.println("Inserisci la nuova  email: ");
+                        System.out.println("Inserisci la nuova email: ");
                         String email2 = scanner.nextLine();
-                        System.out.println("Inserisci il nuovo id: ");
-                        int id = scanner.nextInt();
-                        Utente utente2 = new Utente(id, nome2, email2);
+                        System.out.println("Inserisci l'ID dell'utente da aggiornare: ");
+                       
+                        String inputIdUpdate = scanner.nextLine();
+                        int idUpdate;
+                        try {
+                            idUpdate = Integer.parseInt(inputIdUpdate);
+                        } catch (NumberFormatException e) {
+                            System.out.println("ID non valido. Inserisci un numero.");
+                            break; 
+                        }
+                        Utente utente2 = new Utente(idUpdate, nome2, email2);
                         utenteDatabase.update(utente2);
+                        System.out.println("Utente aggiornato con successo!"); 
                         break;
-                    case 4:
-                        System.out.println("Inserisci l id dell utente da eliminare: ");
-                        int id2  =scanner.nextInt();
-                        utenteDatabase.delete(id2);
+                     case 4:
+                        System.out.println("Inserisci l'ID dell'utente da eliminare: ");
+                        
+                        String id = scanner.nextLine();
+                        int idDelete;
+                        try {
+                            idDelete = Integer.parseInt(id);
+                        } catch (NumberFormatException e) {
+                            System.out.println("ID non valido. Inserisci un numero.");
+                            break; 
+                        }
+                        utenteDatabase.delete(idDelete);
+                        System.out.println("Utente eliminato con successo!"); 
                         break;
                     case 0:
                         System.out.println("Uscita...");
                         return;
                     default:
-                        System.out.println("Opzione non valida.");
+                        System.out.println("Opzione non valida. Riprova.");
                 }
             }
         }
     }
 
-    
 }

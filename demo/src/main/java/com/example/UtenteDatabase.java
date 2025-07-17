@@ -14,9 +14,9 @@ public class UtenteDatabase {
 
 public void insert(Utente utente) {
     try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/world","root","root");
 
-        String insert = "INSERT INTO `utenti` VALUES(?,?)";
+        String insert = "INSERT INTO utenti (nome,email) VALUES(?,?)";
 
         PreparedStatement preparedStatement = conn.prepareStatement(insert);
 
@@ -35,16 +35,18 @@ public void insert(Utente utente) {
         List<Utente> listaUtenti = new ArrayList<>();
 
     try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
-        String read = "SELECT * FROM `utenti` WHERE id= ?";
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/world","root","root");
+        String read ="SELECT id, nome, email FROM utenti";
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery(read);
         
         while(rs.next()) {
+            int id = rs.getInt("id"); 
             String nome = rs.getString("nome");
             String email = rs.getString("email");
-            Utente utente = new Utente(0,nome,email);
+            Utente utente = new Utente(id, nome, email);
             listaUtenti.add(utente);
+            System.out.println(utente);
         }
         return listaUtenti;
     }catch(SQLException e) {
@@ -58,7 +60,7 @@ public void insert(Utente utente) {
     public void update(Utente utente) {
 
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/world" ,"root","root");
 
             String update = "UPDATE `utenti` SET `nome` = ?, `email` =? WHERE `id` = ?";
 
@@ -78,7 +80,7 @@ public void insert(Utente utente) {
     public void delete(int id) {
 
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql/localhost:3306/world","root","root");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/world","root","root");
             // Query SQL per cancellare un utente tramite id
             String sql = "DELETE FROM utenti WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
